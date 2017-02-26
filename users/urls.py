@@ -9,6 +9,8 @@ from django.conf import settings
 # Para agregar el logout
 from django.contrib.auth import views as auth_views
 
+from django.views.static import serve
+
 urlpatterns = [
 		url(r'^$', views.index_view, name='index'),
     	url(r'^login/$', views.login_view, name='login'),
@@ -28,12 +30,9 @@ urlpatterns = [
         url(r'gracias/(?P<username>[\w]+)/', views.gracias_view, name='gracias'),
 
 ]
-# Añade esto, al final del documento
 if settings.DEBUG:
-    # static files (images, css, javascript, etc.)
-    urlpatterns.append(
-        # /media/:<mixed>path/
-        url(
-            regex=r'^media/(?P<path>.*)$',
-            view='django.views.static.serve',
-            kwargs={'document_root': settings.MEDIA_ROOT}))
+    urlpatterns += [
+        url(r'^media/(?P<path>.*)$', serve, {
+            'document_root': settings.MEDIA_ROOT,
+        }),
+    ]
