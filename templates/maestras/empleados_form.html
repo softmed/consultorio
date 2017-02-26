@@ -1,0 +1,13 @@
+
+	<select id="select_empleados" class="js-example-basic-single">
+		{% for empleado in empleados %}
+			<option>{{ empleado.persona.primer_nombre }}</option>
+		{% endfor %}
+	</select>
+
+
+<script type="text/javascript">
+alert()
+	$("#select_empleados").select2();
+	
+</script>

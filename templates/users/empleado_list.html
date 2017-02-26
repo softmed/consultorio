@@ -1,0 +1,24 @@
+{% extends 'base.html' %}
+
+
+{% block page_title %}Listado de empleados{% endblock page_title %}
+
+
+{% block content %}
+      <div class="col-md-10 col-sm-offset-2">
+      <form action="" method="POST">
+      		{% csrf_token %}
+      		<input type="text" name="bus_id" id="bus_id" >
+      		<input type="submit" id="btn_buscar" name="btn_buscar" value="Buscar">
+		</form>
+        {% for empleado in object_list %}
+		    <li><a href="/users/actualiza_empleado/{{empleado.id}}">
+		    	{{ empleado.persona.identificacion }} </a>{{ empleado.persona.primer_nombre }} {{ empleado.persona.primer_apellido }}</li>
+		    	
+		{% empty %}
+		    <li>No hay empleados</li>
+		{% endfor %}
+
+      </div>      
+       
+{% endblock content %}

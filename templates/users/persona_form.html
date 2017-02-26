@@ -1,0 +1,25 @@
+{% extends 'base.html' %}
+
+{% load crispy_forms_tags %}
+
+{% block page_title %}Registro de usuario{% endblock page_title %}
+
+{% block content %}
+      <div class="col-md-10 col-sm-offset-2">
+            <div class="page-header">
+                <h2>Nuevo {{ titulo }}</h2>
+            </div>
+
+            <form action="" method="POST">
+                {% if popup %}
+                <input type="hidden" name="popup" id="popup" value="1">
+                {% endif %}
+            	{% csrf_token %}
+                {%  crispy form %}
+                {%  crispy form2 %}
+               
+            </form>
+
+      </div>      
+       
+{% endblock content %}

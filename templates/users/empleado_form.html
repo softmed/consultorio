@@ -1,0 +1,24 @@
+{% extends 'base.html' %}
+
+{% load crispy_forms_tags %}
+
+{% block page_title %}Registro de usuario{% endblock page_title %}
+
+{% block content %}
+      <div class="col-md-10 col-sm-offset-2">
+            <div class="page-header">
+                <h2>Empleado</h2>
+            </div>
+
+            
+            <form action="" method="POST">
+
+            	{% csrf_token %}
+            	{%  crispy form2 %}
+                {%  crispy form %}
+       
+               
+            </form>
+      </div>      
+       
+{% endblock content %}

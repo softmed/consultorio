@@ -1,0 +1,9 @@
+<complete>
+{% for empleado in empleados %}	
+	{% if por_nombre %}
+		<option value="{{ empleado.id }}">{{ empleado.persona.primer_nombre }} {{ empleado.persona.primer_apellido }} | {{ empleado.persona.identificacion }}</option>
+	{% else %}
+		<option value="{{ empleado.id }}">{{ empleado.persona.identificacion }} | {{ empleado.persona.primer_nombre }} {{ empleado.persona.primer_apellido }}</option>
+	{% endif %}
+{% endfor %}
+</complete>

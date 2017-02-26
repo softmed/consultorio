@@ -1,0 +1,17 @@
+{% extends 'base.html' %}
+
+
+{% block page_title %}Listado de Pacientes{% endblock page_title %}
+
+
+{% block content %}
+      <div class="col-md-10 col-sm-offset-2">
+        {% for persona in object_list %}
+		    <li>{{ persona.primer_nombre }} {{ persona.primer_apellido }}</li>
+		{% empty %}
+		    <li>No hay pacientes</li>
+		{% endfor %}
+
+      </div>      
+       
+{% endblock content %}

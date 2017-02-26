@@ -1,0 +1,9 @@
+<complete>
+{% for paciente in pacientes %}	
+	{% if por_nombre %}
+		<option value="{{ paciente.id }}">{{ paciente.persona_id.primer_nombre }} {{ paciente.persona_id.primer_apellido }}, tel: {{ paciente.persona_id.telefono }}</option>
+	{% else %}
+		<option value="{{ paciente.id }}">{{ paciente.persona_id.identificacion }} | {{ paciente.persona_id.primer_nombre }} {{ paciente.persona_id.primer_apellido }}, tel: {{ paciente.persona_id.telefono }}</option>
+	{% endif %}
+{% endfor %}
+</complete>

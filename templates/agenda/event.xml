@@ -1,0 +1,37 @@
+
+<data>
+{% for event in eventList %}
+   	<event id="{{event.id}}">
+   		{% if event.rec_type %}
+   			<rec_type>{{event.rec_type|escape}}</rec_type>
+   		{% endif %}
+		{% if event.event_pid %}
+   			<event_pid>{{event.event_pid|escape}}</event_pid>
+   		{% endif %}
+   		<event_length>{{event.event_length|escape}}</event_length>
+		<start_date>{{event.fecha_inicio|date:"Y-m-d H:i"|escape}}</start_date>
+		<end_date>{{event.fecha_fin|date:"Y-m-d H:i"|escape}}</end_date>
+		{% if event.paciente_id %}
+		<text>{{ event.paciente.persona_id.primer_nombre }} {{ event.paciente.persona_id.primer_apellido }}, tel: {{ event.paciente.persona_id.telefono }}</text>
+		{% else %}
+		<text><![CDATA[{{event.titulo|escape}}]]></text>
+		{% endif %}
+		{% if event.paciente_id %}
+		<paciente_id>{{ event.paciente_id }}</paciente_id>
+		<paciente_nombre>{{ event.paciente.persona_id.primer_nombre }}</paciente_nombre>
+		{% endif %}
+		{% if event.empleado %}
+		<empleado_id>{{ event.empleado.id }}</empleado_id>
+		<empleado_nombre>{{ event.empleado.persona.primer_nombre }}</empleado_nombre>
+		{% endif %}		
+		{% if event.estado %}
+		<estado_id>{{ event.estado.id }}</estado_id>
+		{% endif %}
+		<details><![CDATA[{{event.observacion|escape}}]]></details>
+		
+		
+	</event>
+{% empty %}
+
+{% endfor %}
+</data>

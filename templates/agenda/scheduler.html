@@ -1,0 +1,354 @@
+{% extends "base.html" %}
+{% load staticfiles %}
+
+{% block page_title %}
+        Agenda
+{% endblock %}
+
+
+{% block aditional_js %}
+
+	<script src="{% static 'js/dhtmlxscheduler.js' %}" type="text/javascript" charset="utf-8"></script>
+	<script src="{% static 'js/ext/dhtmlxscheduler_agenda_view.js' %}" type="text/javascript" charset="utf-8"></script>
+	<script src="{% static 'js/ext/dhtmlxscheduler_year_view.js' %}" type="text/javascript" charset="utf-8"></script>
+	<script src="{% static 'js/ext/dhtmlxscheduler_recurring.js' %}" type="text/javascript" charset="utf-8"></script>
+	<script src="{% static 'js/ext/locale_recurring_es.js' %}" type="text/javascript" charset="utf-8"></script>
+	<!-- <script src="{% static 'js/ext/dhtmlxscheduler_collision.js' %}" type="text/javascript" charset="utf-8"></script> -->
+	<script src="{% static 'js/ext/dhtmlxscheduler_minical.js' %}" type="text/javascript" charset="utf-8"></script>
+	<script src="{% static 'js/locale_es.js' %}" type="text/javascript" charset="utf-8"></script>
+
+	<script src="{% static 'js/ext/dhtmlxscheduler_editors.js' %}" type="text/javascript" charset="utf-8"></script>
+	<script src="{% static 'js/dhtmlxcombo.js' %}" type="text/javascript" charset="utf-8"></script>
+
+
+<!-- 	<script src="{% static 'js/dhtmlxscheduler.js' %}" type="text/javascript" charset="utf-8"></script>
+	<script src="{% static 'js/ext/dhtmlxscheduler_recurring.js' %}" type="text/javascript" charset="utf-8"></script>
+	<script src="{% static 'js/ext/dhtmlxscheduler_minical.js' %}" type="text/javascript" charset="utf-8"></script> -->
+
+
+	<style type="text/css">
+		.dhx_cal_event.event_pendiente div, .dhx_cal_event_line.event_math{
+			background-color: orange !important;
+			border-color: #a36800 !important;
+		}
+		.dhx_cal_event_clear.event_pendiente{
+			color:orange !important;
+		}
+
+		.dhx_cal_event.event_confirmado div, .dhx_cal_event_line.event_science{
+			background-color: #36BD14 !important;
+			border-color: #698490 !important;
+		}
+		.dhx_cal_event_clear.event_confirmado{
+			color:#36BD14 !important;
+		}
+
+	</style>
+
+
+	<script type="text/javascript" charset="utf-8">
+
+		function init() {
+
+			var step = 15;
+			var format = scheduler.date.date_to_str("%H:%i");
+			
+			scheduler.config.hour_size_px=(60/step)*22;
+			scheduler.templates.hour_scale = function(date){
+				html="";
+				for (var i=0; i<60/step; i++){
+					html+="<div style='height:22px;line-height:22px;'>"+format(date)+"</div>";
+					date = scheduler.date.add(date,step,"minute");
+				}
+				return html;
+			}
+				scheduler.config.scroll_hour = (new Date).getHours();
+				scheduler.config.time_step = 15;
+				scheduler.config.details_on_dblclick = true;
+				scheduler.config.details_on_create = true;
+				scheduler.config.multi_day = true;
+				scheduler.config.event_duration = 15;
+				scheduler.config.xml_date = "%Y-%m-%d %H:%i";
+				scheduler.config.occurrence_timestamp_in_utc = true;
+				scheduler.config.include_end_by = true;
+				scheduler.config.repeat_precise = true;
+
+				var estados = [
+					{ key: 1, label: 'Pendiente' },
+					{ key: 2, label: 'Confirmada' },
+					// { key: 7, label: 'Chips' },
+					// { key: 8, label: 'Apple pie' }
+				];
+
+				scheduler.templates.event_class=function(start, end, event){
+				var css = "";
+
+				if(event.estado_id) // if event has subject property then special class should be assigned
+					css += "event_"+estados[event.estado_id-1].label.toLowerCase();
+					
+
+				if(event.id == scheduler.getState().select_id){
+					css += " selected";
+				}
+				return css; // default return
+
+				/*
+					Note that it is possible to create more complex checks
+					events with the same properties could have different CSS classes depending on the current view:
+
+					var mode = scheduler.getState().mode;
+					if(mode == "day"){
+						// custom logic here
+					}
+					else {
+						// custom logic here
+					}
+				*/
+				};	
+
+
+
+
+
+				scheduler.attachEvent("onLightbox", function(){
+					var lightbox_form = scheduler.getLightbox(); // this will generate lightbox form
+					var inputs = lightbox_form.getElementsByTagName('input');
+					var date_of_end = null;
+					for (var i=0; i<inputs.length; i++) {
+						if (inputs[i].name == "date_of_end") {
+							date_of_end = inputs[i];
+							break;
+						}
+					}
+
+					var repeat_end_date_format = scheduler.date.date_to_str(scheduler.config.repeat_date);
+					var show_minical = function(){
+						if (scheduler.isCalendarVisible())
+							scheduler.destroyCalendar();
+						else {
+							scheduler.renderCalendar({
+								position:date_of_end,
+								date: scheduler.getState().date,
+								navigation:true,
+								handler:function(date,calendar) {
+									date_of_end.value = repeat_end_date_format(date);
+									scheduler.destroyCalendar()
+								}
+							});
+						}
+					};
+					date_of_end.onclick = show_minical;
+				});
+
+			
+				scheduler.form_blocks["text_editor"] = {
+					render:function(sns) {
+						return "<div class='dhx_cal_ltext' style='height:60px;'>Text&nbsp;<input type='text' name='text' id='text' value='test'><br/>Details&nbsp;<input type='text'></div>";
+					},
+					set_value:function(node, value, ev) {
+						
+						node.childNodes[0].value = value || "";
+						node.childNodes[4].value = ev.details || "";
+					},
+					get_value:function(node, ev) {
+						ev.details = node.childNodes[4].value;
+						return node.childNodes[0].value;
+					},
+					focus:function(node) {
+						var a = node.childNodes[0];
+						//a.select();
+						//a.focus();
+					}
+				};
+				
+				scheduler.locale.labels.section_paciente = "Paciente:";
+				scheduler.locale.labels.section_empleado = "Empleado:";
+				scheduler.locale.labels.section_estado = "Estado:";
+
+
+				scheduler.locale.labels.section_recurring = "Repetir:";
+				scheduler.config.lightbox.sections = [
+					//{ name:"description", height:200, map_to:"text", type:"text_editor" , focus:true},
+					{ name:"description", height:35, map_to:"text", type:"textarea" , focus:true },
+					{ name: "paciente", map_to: "paciente_id", type: "combo", image_path: "{% static 'img/dhtmlxscheduler/'%}", height:30, filtering: true, script_path: "/maestras/pacientes/", add_new: true },
+					{% if not empleado %}
+
+					{ name: "empleado", map_to: "empleado_id", type: "combo", image_path: "{% static 'img/dhtmlxscheduler/'%}", height:30, filtering: true, script_path: "/maestras/empleados/", add_new: true },
+					{% endif %}
+					{ name: "estado", options: estados, map_to: "estado_id", type: "combo", image_path: "{% static 'img/dhtmlxscheduler/'%}", height:30, filtering: true},
+					//{ name: "paciente", options: paciente, map_to: "combo_select", type: "paciente_editor", image_path: "{% static 'img/dhtmlxscheduler/'%}", height:30, filtering: true, script_path: "/maestras/pacientes/" },
+					{ name:"recurring", type:"recurring", map_to:"rec_type", button:"recurring" },
+					{ name:"time", height:72, type:"calendar_time", map_to:"auto" }
+				];
+
+				scheduler.init('scheduler_here', new Date(), "week");
+
+				// scheduler.templates.event_text=function(start,end,event){
+				// 	var paciente_txt = "";
+				// 	if (event.paciente_nombre) {
+				// 		paciente_txt = "Paciente: " + event.paciente_nombre;
+				// 	}
+
+				// 	return event.text + "</b><br>" + paciente_txt;
+				// }
+
+				{% if not empleado %}
+				scheduler.load("/agenda/events/", function() {
+				{% else %}
+				scheduler.load("/agenda/events_empleado/", function() {
+				{% endif %}
+				});
+				var dp = new dataProcessor("/agenda/dataprocessor/");
+				dp.init(scheduler);
+				dp.setTransactionMode("POST",false);
+
+
+
+		// $(".sel_empleado").click(function(){
+		
+		// 	$.ajax({
+		// 	  method: "POST",
+		// 	  url: "/maestras/empleados_form/",
+		// 	  dataType: "html"
+		// 	}).done(function( data ) {
+		// 		$("#select_empleados_div").html(data);
+				
+				
+				
+		// 	});
+		// })
+
+			$("#empleado_id_select").select2();
+			$("#btSelEmpleado").click(function(){
+				// $("#agenda_empleado_form").submit();
+				scheduler.clearAll();
+				scheduler.load("/agenda/events/?empleado_id=" + $("#empleado_id_select").val());
+				
+				$("#empleado_selected_value").val($("#select2-empleado_id_select-container").text());
+				$("#empleado_selected_id").val($("#empleado_id_select").val());
+
+				$("#modalEmpleado").modal('hide');
+				
+
+				
+			});			
+			$("#btSelEmpleadoTodos").click(function(){
+				// $("#agenda_empleado_form").submit();
+				scheduler.clearAll();
+				scheduler.load("/agenda/events/");
+				
+				$("#empleado_selected_value").val("");
+				$("#empleado_selected_id").val("");
+
+				$("#modalEmpleado").modal('hide');
+				
+
+				
+			});
+
+			
+		}
+
+		function add_item(nombre){
+			if (nombre == 'empleado_id') {
+				var w = window.open('/users/nuevo_empleado/popup','_blank','width=800,height=600,scrollbars=1');
+			} else if (nombre == 'paciente_id') {
+				var w = window.open('/users/nuevo_paciente/popup','_blank','width=800,height=600,scrollbars=1');
+			}
+			
+		}
+		function setIdentificacion(valor, id, campo) {
+			$("#new_" + campo + "_id").val(id);
+			$("input[name=" + campo + "]").val(valor);
+			$("input[name=" + campo + "]").parent().find(".dhx_combo_input").val(valor);
+		}
+	</script>
+	
+{% endblock %}
+
+
+{% block aditional_css %}
+	<link rel="stylesheet" href="{% static 'css/dhtmlxscheduler_flat.css' %}" type="text/css" media="screen" title="no title" charset="utf-8">
+	<link rel="stylesheet" href="{% static 'css/dhtmlxcombo.css' %}" type="text/css" media="screen" title="no title" charset="utf-8">
+
+	
+	
+	<style type="text/css">
+		html, body{ height:100%; padding:0px; }
+		
+		.container-fluid #scheduler_here {
+			height: 700px;
+			width: 100%;
+			border: 1px solid #cecece;
+		}
+		
+	</style>
+
+	
+{% endblock %}
+
+{% block body_param %}
+	onload="init();"
+	{% endblock %}
+
+{% block content %}
+
+
+<input type="hidden" id="empleado_selected_value" name="empleado_selected_value"/>
+<input type="hidden" id="empleado_selected_id" name="empleado_selected_id"/>
+
+<div id="scheduler_here" class="dhx_cal_container panel">
+	<div class="dhx_cal_navline">
+		<div class="dhx_cal_prev_button">&nbsp;</div>
+		<div class="dhx_cal_next_button">&nbsp;</div>
+		<div class="dhx_cal_today_button"></div>
+		<div class="dhx_cal_date"></div>
+		<div class="dhx_cal_tab" name="day_tab" style="right:204px;"></div>
+		<div class="dhx_cal_tab" name="week_tab" style="right:140px;"></div>
+		<div class="dhx_cal_tab" name="month_tab" style="right:76px;"></div>
+		<div class="dhx_cal_tab" name="year_tab" style="right:76px;"></div>
+		<div class="dhx_cal_tab" name="agenda_tab" style="right:280px;"></div>
+		{% if not empleado %}
+		<div class="dhx_cal_tab sel_empleado" data-toggle="modal" data-target="#modalEmpleado" name="Empleado" style="right:280px;"></div>
+		{% endif %}
+	</div>
+	<div class="dhx_cal_header"></div>
+	<div class="dhx_cal_data"></div>
+
+</div>
+
+
+
+ <div class="modal fade" id="modalEmpleado" role="dialog" aria-labelledby="modalEmpleadoLabel">
+  <div class="modal-dialog" role="document">
+    <div class="modal-content">
+      <div class="modal-header">
+        <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+        <h4 class="modal-title" id="modalEmpleadoLabel">Seleccione un Empleado</h4>
+      </div>
+      <div class="modal-body">
+        <form id="agenda_empleado_form" method="POST" action="/agenda/empleado/">
+        	{% csrf_token %}
+        	
+          <div class="form-group">
+          	<label for="message-text" class="control-label">Empleados: </label>
+          	<select id="empleado_id_select" name="empleado_id_select">
+				{% for empleado in empleados %}
+				<option value="{{ empleado.id }}">{{ empleado.persona.primer_nombre }} {{ empleado.persona.primer_apellido }} | {{ empleado.persona.identificacion }}</option>
+				{% endfor %}
+			</select>
+          </div>
+        </form>
+      </div>
+      <div class="modal-footer">
+        <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
+        <button type="button" class="btn btn-primary" id="btSelEmpleado">Seleccionar</button>
+        <button type="button" class="btn btn-primary" id="btSelEmpleadoTodos">Todos</button>
+      </div>
+    </div>
+  </div>
+</div>
+
+
+
+{% endblock %}

@@ -1,0 +1,85 @@
+{% load staticfiles %}
+
+<!DOCTYPE html>
+<html>
+<head>
+	<meta charset="utf-8"/>
+
+	
+	<meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+
+	<title>{% block page_title %}{% endblock %}</title>
+	
+	<link rel="stylesheet" href="{% static 'bootstrap/css/bootstrap.css' %}">
+   	<link rel="stylesheet" href="{% static 'bootstrap/css/bootstrap-datepicker.css' %}">
+   	<link rel="stylesheet" type="text/css" href="{% static 'css/base.css' %}">
+   	<link rel="stylesheet" type="text/css" href="{% static 'css/select2.min.css' %}">
+
+   	<!-- Estilo del footer -->
+   	<link rel="stylesheet" type="text/css" href="{% static 'css/footer.css' %}">
+   	<link rel="stylesheet" type="text/css" href="{% static 'css/skins/_all-skins.min.css' %}">
+   	<!-- Iconos de contacto -->
+   	<link rel="stylesheet" href="http://maxcdn.bootstrapcdn.com/font-awesome/4.2.0/css/font-awesome.min.css">
+
+   	<!-- Fuentes -->
+	<link href="http://fonts.googleapis.com/css?family=Cookie" rel="stylesheet" type="text/css">
+
+	{% block aditional_css %}{% endblock %}
+
+
+	<script src="{% static 'jquery/jquery.js' %}"></script>
+
+
+
+
+
+</head>
+<body {% block body_param %}{% endblock %}>
+	<div class="container-fluid">
+	{% if not popup %}
+		{% include '_navbar.html' %}
+	{% endif %}
+	{% include '_messages.html' %}
+
+	{% block content %}{% endblock %}
+
+	
+
+	
+
+</div>
+	{% if not popup %}
+		{% include '_footer.html' %}
+	{% endif %}
+	
+	{% block aditional_js %}{% endblock %}			
+
+
+
+    <script src="{% static 'bootstrap/js/bootstrap.js' %}"></script>
+    <script src="{% static 'bootstrap/js/bootstrap-datepicker.min.js' %}"></script>
+    <script src="{% static 'js/select2.min.js' %}"></script>
+    
+	
+    <script type="text/javascript">
+    	$(document).ready(function() {
+
+		    $('.dateinput').datepicker({ 
+		    	format: "dd/mm/yyyy", 
+		    	autoclose:true,
+		    	todayBtn: "linked", 
+		    	language: "es" 
+		    }); 
+
+
+
+
+
+		});
+
+    </script>
+
+
+</body>
+</html>

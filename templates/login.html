@@ -1,0 +1,25 @@
+{% extends "base.html" %}
+
+{% block content %}
+	<h1>Login Django</h1>
+	<form action="" method="POST">
+		{% csrf_token %}
+		<input type="hidden" id="action" name="action" value="login" />
+		<input type="text" id="username" name="username" />
+		<input type="password" id="password" name="password" />
+		
+		<button type="asdf">Login</button>
+
+	</form>
+	<h1>SignUp</h1>
+	<form action="" method="POST">
+		{% csrf_token %}
+		<input type="hidden" id="action" name="action" value="signup" />
+		<input type="text" id="username" name="username" />
+		<input type="password" id="password" name="password" />
+		
+		<button type="submit">SignUP</button>
+
+	</form>
+
+{% endblock %}

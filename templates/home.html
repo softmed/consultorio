@@ -1,0 +1,41 @@
+{% extends "base.html" %}
+
+{% block page_title %}
+        Pagina Principal
+{% endblock %}
+
+{% block menu %}
+	<nav>
+		{% if menus %}
+		<ul>
+			{% for m in menus %}
+				<li>
+					
+	                {{ m.name }}
+	                <a href="{{m.link}}">Login</a>
+					
+				</li>
+			{%endfor%}
+		</ul>
+		{% else  %}
+			<h1>No hay menus</h1>
+		{% endif %}
+
+
+	</nav>
+	
+
+{% endblock %}
+
+{% block content %}
+	
+	{% if user.is_authenticated %}	
+		<a href="{% url 'users:logout' %}">Logout</a>
+	{% else %}
+		<a href="{% url 'users:login' %}">Login</a>	
+
+	{% endif %}
+
+	<h1>HOME</h1>
+
+{% endblock %}
