@@ -53,7 +53,6 @@ INSTALLED_APPS = [
     'agenda',
 
     'crispy_forms',
-    'django_tables2'
 ]
 
 MIDDLEWARE_CLASSES = [
@@ -67,7 +66,7 @@ MIDDLEWARE_CLASSES = [
     'django.middleware.clickjacking.XFrameOptionsMiddleware',
 ]
 
-ROOT_URLCONF = 'base.urls'
+ROOT_URLCONF = 'softmed.urls'
 
 TEMPLATES = [
     {
@@ -88,7 +87,7 @@ TEMPLATES = [
     },
 ]
 
-WSGI_APPLICATION = 'base.wsgi.application'
+WSGI_APPLICATION = 'softmed.wsgi.application'
 
 
 
