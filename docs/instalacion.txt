@@ -1,0 +1,38 @@
+# Crear Entorno virtual
+virtualenv venv
+
+# Activar el entorno
+source venv/bin/activate
+
+# Instalar Pillow para manejo de imagenes
+pip install pillow
+
+# Instalacion Django
+pip install django
+
+# Iniciar proyecto
+django-admin.py startproject softmed
+
+# Cambiar el nombre a la carpeta por comodidad
+mv softmed src
+
+# En mac antes de instalar el psycopg2
+export PATH=$PATH:/Applications/Postgres.app/Contents/Versions/9.5/bin
+
+# Instalar psycopg2
+pip install psycopg2
+
+mkdir cfg
+vim cfg/project.config
+
+[db]
+ENGINE = django.db.backends.postgresql_psycopg2
+NAME = dbbase
+USER = dbuser
+PASSWORD = dbuserpassword
+HOST = ip
+PORT = puerto
+
+
+
+
