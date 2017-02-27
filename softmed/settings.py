@@ -32,7 +32,7 @@ if config.get('project', 'EMVIRONMENT') == 'DEVELOPMENT':
 else:
     DEBUG = False
     
-ALLOWED_HOSTS = []
+ALLOWED_HOSTS = ['www.draiven.com', 'draiven.com']
 
 
 # Application definition
