@@ -27,12 +27,12 @@ config.readfp(open(r'cfg/project.config'))
 SECRET_KEY = config.get('project', 'SECRET_KEY')
 
 # SECURITY WARNING: don't run with debug turned on in production!
-if config.get('project', 'EMVIRONMENT') == 'DEVELOPMENT':
+if config.get('project', 'ENVIRONMENT') == 'DEVELOPMENT':
     DEBUG = True
 else:
     DEBUG = False
     
-ALLOWED_HOSTS = ['www.draiven.com', 'draiven.com']
+ALLOWED_HOSTS = ['www.draiven.com', 'draiven.com', '127.0.0.1']
 
 
 # Application definition
