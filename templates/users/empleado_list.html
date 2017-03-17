@@ -5,20 +5,84 @@
 
 
 {% block content %}
-      <div class="col-md-10 col-sm-offset-2">
-      <form action="" method="POST">
+
+     <div class="col-md-8 col-sm-offset-2">
+      	<form action="/users/lista_pacientes/" method="POST">
       		{% csrf_token %}
-      		<input type="text" name="bus_id" id="bus_id" >
-      		<input type="submit" id="btn_buscar" name="btn_buscar" value="Buscar">
+      		<input type="text" name="bus_id" id="bus_id" class="textInput">
+      		<input type="submit" id="btn_buscar" name="btn_buscar" value="Buscar" class="btn btn-primary">
 		</form>
+		  <ul class="pager">
+    
+    
+  
+		{% if page_obj.has_previous %}
+		<li class="previous"><a href="?page={{ page_obj.previous_page_number }}">Previous</a></li>
+	        <!-- Anterior {{ page_obj.previous_page_number }} -->
+		{% endif %}
+			{% if page_obj.paginator.count > 1 %}
+		       Empleados ({{ page_obj.start_index }} - {{ page_obj.end_index }}) de {{ page_obj.paginator.count }}
+		    {% endif %}
+		{% if page_obj.has_next %}
+
+		
+			<!-- Siguiente {{ page_obj.next_page_number }} -->
+		
+		<li class="next"><a href="?page={{ page_obj.next_page_number }}">Next</a></li>
+		       
+		{% endif %}
+</ul>
+		<table class="table table-striped">
+		<thead>
+			<tr>
+			<th>Identificación</th>
+			<th>Primer Nombre</th>
+			<th>Segundo Nombre</th>
+			<th>Primer Apellido</th>
+			<th>Segundo Apellido</th>
+			<th>Teléfono</th>
+			</tr>
+		</thead>
+		<tbody>
         {% for empleado in object_list %}
-		    <li><a href="/users/actualiza_empleado/{{empleado.id}}">
-		    	{{ empleado.persona.identificacion }} </a>{{ empleado.persona.primer_nombre }} {{ empleado.persona.primer_apellido }}</li>
+        	<tr>
+        		<td>
+        			<a href="/users/actualiza_empleado/{{empleado.id}}">
+		    		{{ empleado.persona.identificacion }} </a>
+        		</td>
+        		<td>
+        			{{ empleado.persona.primer_nombre }}
+        		</td>
+        		<td>
+        			{{ empleado.persona.segundo_nombre }}
+        		</td>        		
+        		<td>
+        			{{ empleado.persona.primer_apellido }}
+        		</td>        		
+        		<td>
+        			{{ empleado.persona.segundo_apellido }}
+        		</td>
+        		<td>
+        			{{ empleado.persona.telefono }}
+        		</td>
+        	</tr>
 		    	
 		{% empty %}
-		    <li>No hay empleados</li>
+		    <li>No hay pacientes</li>
 		{% endfor %}
 
-      </div>      
+
+
+
+
+		</tbody>
+		</table>
+      </div> 
+
+
+
+
+
+
        
 {% endblock content %}
