@@ -19,17 +19,8 @@ mv softmed src
 # En mac antes de instalar el psycopg2
 export PATH=$PATH:/Applications/Postgres.app/Contents/Versions/9.5/bin
 
-# En ubuntu server
-sudo apt-get install libpq-dev
-
 # Instalar psycopg2
 pip install psycopg2
-
-# Instalar crispy-forms
-pip install django-crispy-forms
-
-# Instalar libreria para agregar grupo requerido en los metodos
-pip install django-braces 
 
 mkdir cfg
 vim cfg/project.config
@@ -44,64 +35,10 @@ PORT = puerto
 
 [project]
 SECRET_KEY = 4s!$gc+f_)-j8f%j36&)fdls48$&13zswzv6t+wm4lygu&ob5q
-EMVIRONMENT = DEVELOPMENT
+ENVIRONMENT = DEVELOPMENT
 
 ###########################################################
 
-
-
-
-pip install gunicorn
-
-
-
-sudo pip install supervisor
-sudo vim /etc/supervisor/conf.d/myapp.conf
-###########################################################
-[program:myapp]
-command = /home/user/project/venv/bin/gunicorn_start                    			; Command to start app
-user = user                                                          			; User to run as
-stdout_logfile = /home/user/project/src/logs/gunicorn_supervisor.log   	; Where to write log messages
-redirect_stderr = true                                                				; Save stderr in the same log
-environment=LANG=en_US.UTF-8,LC_ALL=en_US.UTF-8
-###########################################################
-
-
-
-
-sudo apt-get install nginx
-sudo vim /etc/nginx/sites-enabled/default 
-###########################################################
-upstream djangoProject_server {
-  server unix:/home/draiven/softmed/src/run/gunicorn.sock fail_timeout=0;
-}
-server {
-        listen 80 default_server;
-        listen [::]:80 default_server ipv6only=on;
-
-        root /usr/share/nginx/html;
-        index index.html index.htm;
-
-        server_name www.draiven.com;
-
-        location / {
-                proxy_set_header X-Forwarded-For $proxy_add_x_forwarded_for;
-
-                proxy_set_header Host $http_host;
-                proxy_redirect off;
-                if (!-f $request_filename) {
-                    proxy_pass http://djangoProject_server;
-                    break;
-                }
-        }
-        location /static {
-                alias /home/draiven/softmed/src/static; # your Django project's static files - amend as required
-        }
-        location /static/admin {
-                alias /home/draiven/softmed/src/static; # your Django project's static files - amend as required
-        }
-}
-###########################################################
 
 
 
