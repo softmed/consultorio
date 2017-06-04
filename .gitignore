@@ -3,4 +3,4 @@
 cfg/*
 run/*
 *.log
-migrations/[0-9]+_initial.py*
+migrations/*initial.py*
